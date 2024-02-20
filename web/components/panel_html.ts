@@ -3,6 +3,8 @@ export const panelHtml = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <base target="_top">
+    <link rel="stylesheet" href="/.client/main.css" />
+    <style id="custom-styles"></style>
 <script>
 const pendingRequests = new Map();
 let syscallReqId = 0;
@@ -26,6 +28,10 @@ let heightChecks = 0;
 window.addEventListener("message", (message) => {
   const data = message.data;
   switch (data.type) {
+    case "ui-options": 
+      document.getElementsByTagName("html")[0].setAttribute("data-theme", data.theme);
+      document.getElementById("custom-styles").innerHTML = data.customStyles;
+      break;
     case "html":
       document.body.innerHTML = data.html;
       if(data.theme) {

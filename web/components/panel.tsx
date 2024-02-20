@@ -11,8 +11,22 @@ export function Panel({
   editor: Client;
 }) {
   const iFrameRef = useRef<HTMLIFrameElement>(null);
+
+  function loadUiOptions() {
+    if (iFrameRef.current?.contentWindow) {  
+      iFrameRef.current.contentWindow.postMessage({
+        ...editor.ui.viewState.uiOptions,
+        type: "ui-options",
+        theme: editor.ui.viewState.uiOptions.darkMode ? "dark" : "light",
+      });
+    }
+  }
+  
+  useEffect(loadUiOptions, [editor.ui.viewState.uiOptions])
+
   useEffect(() => {
     function loadContent() {
+      loadUiOptions();
       if (iFrameRef.current?.contentWindow) {
         iFrameRef.current.contentWindow.postMessage({
           type: "html",
